@@ -23,6 +23,7 @@ Only use the conf.level, beta_til e method arguments when running equals "Y", ot
 
 # Author(s)
 Kaíque Ferreira Henrique de Souza
+
 Tatiane Ferreira do N. M. da Silva
 
 # References
