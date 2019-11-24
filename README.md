@@ -9,29 +9,14 @@ MEV(x, y, lambda_x, Correction = FALSE, method = "Bartlett",
   beta_til = 0, conf.level = 0.95, ...)
   
 # Arguments
-### x	
-Values vector
-
-### y	
-Error vector
-
-### lambda_x	
-Ratio of variances between values and error
-
-### Correction	
-Small sample correction, use TRUE or FALSE
-
-### method	
-The correction method that will be considered "Bartlett", "B1" or "B2"
-
-### beta_til	
-Parameter value to be tested
-
-### conf.level	
-Significance level for the hypothesis test
-
-### ...	
-Not always use all arguments
+- **x**  Values vector
+- **y** Error vector
+- **lambda_x** Ratio of variances between values and error
+- **Correction** Small sample correction, use TRUE or FALSE
+- **method** The correction method that will be considered "Bartlett", "B1" or "B2"
+- **beta_til** Parameter value to be tested
+- **conf.level** Significance level for the hypothesis test
+- **...** Not always use all arguments
 
 # Details
 Only use the conf.level, beta_til e method arguments when running equals "Y", otherwise these arguments will not affect the results.
@@ -63,8 +48,11 @@ Melo, T.F.N., Vasconcellos, K.L.P., Lemonte, A.J. (2009). Some restriction tests
 lm
 
 # Examples
+
+```
 x = seq(1,100,length.out = 100)
 y = sort(runif(100,1,10))
 
 MEV(x, y, lambda_x = 2 )
 MEV(x, y, lambda_x = 1, beta_til = 4 ,conf.level = 0.95 ,Correction = TRUE)
+```
