@@ -5,9 +5,11 @@ Regression in model with errors
 MEV is used to adjust models with errors in the variables. It can be used to perform regressions on variables that have measurement errors.
 
 # Usage
+```
 MEV(x, y, lambda_x, Correction = FALSE, method = "Bartlett",
   beta_til = 0, conf.level = 0.95, ...)
-  
+```
+
 # Arguments
 - **x**  Values vector
 - **y** Error vector
