@@ -1,0 +1,10 @@
+Package: Error
+Type: Package
+Title: Model with errors in variables
+Version: 0.1.0
+Author: Kaique; Tatiane
+Maintainer: The package maintainer <kaiquefhds@gmail.com>
+Description: MEV is used to adjust models with errors in the variables    It can be used to perform regressions on variables that have measurement errors
+License: What license is it under
+Encoding: UTF-8
+LazyData: true
