@@ -12,7 +12,7 @@ MEV(x, y, lambda_x, Correction = FALSE, method = "Bartlett",
 ### x	
 Values vector
 
-###cy	
+### y	
 Error vector
 
 ### lambda_x	
