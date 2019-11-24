@@ -24,7 +24,7 @@ Only use the conf.level, beta_til e method arguments when running equals "Y", ot
 # Author(s)
 Kaíque Ferreira Henrique de Souza
 
-Tatiane Ferreira do N. M. da Silva
+Dra. Tatiane Ferreira do N. M. da Silva
 
 # References
 Aoki, R., Bolfarine, H. e Singer, J.M. (2001). Null intercept measurement error regressionmodels.TestA, 10, 441-457.
