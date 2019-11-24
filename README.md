@@ -2,7 +2,16 @@
 Regression in model with errors
 
 # Description
-MEV is used to adjust models with errors in the variables. It can be used to perform regressions on variables that have measurement errors.
+The Error package has the MEV function that can be used to adjust models with variable errors. It can be used to perform regressions on variables that have measurement errors.
+
+# How to install
+```
+install.packages("devtools")
+library(devtools)
+
+install_github("Kaique-fhs/Error")
+library(Error)
+```
 
 # Usage
 ```
