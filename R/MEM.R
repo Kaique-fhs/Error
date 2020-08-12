@@ -490,7 +490,7 @@ MEM = function(x, y, lambda_x , Correction = FALSE, method = "Bartlett", conf.le
           cat("F-statistic:", " XXXXX " ,"on "," XXXXX "," and", " XXXXX "," DF", " p-value: "," XXXXX ", " \n")
         } #End of function exit list
         
-        Saida
+        Saida()
         
         
       }else{ warning("lambda_x must be a single numbers") }
@@ -539,7 +539,7 @@ MEM = function(x, y, lambda_x , Correction = FALSE, method = "Bartlett", conf.le
             cat("F-statistic:", " XXXXX " ,"on "," XXXXX "," and", " XXXXX "," DF", " p-value: "," XXXXX ", " \n")
           } #End of function exit list
           
-          Saida
+          Saida()
           
           
         }else{ warning("lambda_x must be a single numbers") }
