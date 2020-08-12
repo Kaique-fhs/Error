@@ -12,3 +12,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: F
 RoxygenNote: 7.0.2
+NeedsCompilation: no
+Packaged: 2020-08-12 13:06:57 UTC; rstudio-user
+Author: Kaíque Ferreira [aut, cre] (<https://orcid.org/YOUR-ORCID-ID>)
+Maintainer: Kaíque Ferreira  <kaiquefhds@gmail.com>
