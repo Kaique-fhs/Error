@@ -1,13 +1,12 @@
 #' @title Regression in model with errors
-#' @name MEV
+#' @name MEM
 #'
-#' @description MEVV is used to adjust models with errors in the variables.    It can be used to perform regressions on variables that have measurement errors.
+#' @description MEM is used to adjust models with errors in the variables.    It can be used to perform regressions on variables that have measurement errors.
 #'
 #' @param x Values vector
-#' @param y Error vector
+#' @param y Values vector
 #' @param lambda_x Ratio of variances between values and error
 #' @param conf.level Significance level for the hypothesis test
-#' @param beta_til Parameter value to be tested
 #' @param Correction Small sample correction, use TRUE or FALSE
 #' @param method The correction method that will be considered "Bartlett", "B1" or "B2"
 #' @param ... Not always use all arguments
@@ -25,24 +24,20 @@
 #' x = seq(1,100,length.out = 100)
 #' y = sort(runif(100,1,10))
 #' 
-#' MEV(x, y, lambda_x = 2 )
-#' MEV(x, y, lambda_x = 1, beta_til = 4 ,conf.level = 0.95 ,Correction = TRUE)
+#' MEM(x, y, lambda_x = 2 )
+#' MEM(x, y, lambda_x = 1, conf.level = 0.95 ,Correction = TRUE)
 #' 
 #' @importFrom stats qchisq
 #' 
-#' @references Aoki, R., Bolfarine, H. e Singer, J.M. (2001). Null intercept measurement error regressionmodels.TestA, 10, 441-457.
-#' @references Aubin, E.C.Q. e Cordeiro, G.M. (2000). Bartlett-corrected tests for normal linear modelswhen the error covariance matrix is nonscalar.Communications in Statistics,  Theory andMethods,29, 2405-2426.
-#' @references Barndorff–Nielsen, O.E. (1986), Inference on full or partial parameters, based on the stan-dardized signed log likelihood ratio,Biometrika, 73, 307-322.
 #' @references Bartlett, M.S. (1937), Properties of sufficiency and statistical tests,Proceedings of RoyalSociety of London A, 160, 268-282.
-#' @references Bayer, F.M., Cribari–Neto, F. (2013). Bartlett corrections in beta regression models.Journalof Statistical Planning and Inference, 143, 531–547.
-#' @references Botter, D.A. e Cordeiro G.M. (1997). Bartlett corrections for generalized linear models withdispersion covariates.Communications in Statistics, Theory and Methods, 26, 279-307.
-#' @references Chan,  L.K.&Mak,  T.K.,  On  the  maximum  likelihood  estimation  of  a  linear  structuralrelashionship  when  the  intercept  is  known,Journal  of  Multivariate  Analysis,  9,  304-313(1979).
 #' @references Fuller, S. (1987),Measurement Error Models. Wiley, New York.
 #' @references Melo, T.F.N., Vasconcellos, K.L.P., Lemonte, A.J. (2009). Some restriction tests in a newclass of regression models for proportions.Computational Statistics and Data Analysis, 53,3972–3979.
 #'
 #' @export
-MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til = 0, conf.level = 0.95 , ...){
+MEM = function(x, y, lambda_x , Correction = FALSE, method = "Bartlett", conf.level = 0.95 , ...){
  
+  
+  
   # Operating Conditions
   if(Correction == TRUE){
   
@@ -67,6 +62,7 @@ MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til
         sigma2_e_til  = c()
         sigma2_u_til  = c()
         Det_Sigma_til = c()
+        beta_til      = 0
         
         mu_hat = array(NA,c(2,1))
         mu_til = array(NA,c(2,1))
@@ -84,8 +80,14 @@ MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til
         
         n = 1
         Z             = array(NA,c(2,1,n))
+        Z_mean        = matrix(NA,2,1)
         diferenca_hat = array(NA,c(2,1,n))
         diferenca_til = array(NA,c(2,1,n))
+        Y_um_dois     = matrix(NA,c(2,1))
+        Y_zero        = c()
+        x_til         = c()
+        v_hat = c()
+        
         
         Sigma      = list()
         Sigma[[1]] = array(0,c(2,2,5))
@@ -141,14 +143,28 @@ MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til
         S_xx    = mean((x[] - x_barra)^2)
         S_yy    = mean((y[] - y_barra)^2)
         S_xy    = mean((x[] - x_barra)*(y[] - y_barra))
+        M_zz    = ((1/(length(x)-1))*sum(((y[] - y_barra)^2)+((x[] - x_barra)^2)))
+        M_zx    = ((1/(length(x)-1))*sum(((y[] - y_barra)*(x[] - x_barra))+((x[] - x_barra)^2)))
+        M_yy    = ((1/(length(x)-1))*sum((y[]-y_barra)^2))
+        M_x    = ((1/(length(x)-1))*sum((x[]-x_barra)^2))
+        M_xy    = ((1/(length(x)-1))*sum((x[]-x_barra)*(y[]-y_barra)))
+        
         
         ## Maximum likelihood estimates (e.m.v.)
         beta_hat     = ((lambda_x + 1)*S_xy)/(lambda_x*S_xx)
+      #  beta_um_hat  = (M_xx - )
         mu_x_hat     = x_barra
         alfa_hat     = y_barra - (beta_hat*x_barra)
         sigma2_u_hat = S_xx/(lambda_x + 1)
         sigma2_e_hat = (lambda_x*(S_yy*S_xx - S_xy^2) - S_xy^2)/(lambda_x*S_xx)
-        
+    #    sigma_xx     = (M_xx - sigma_uu)
+    #    sigma_uu     = (M_xx - sigma_xx)
+        Y_um_dois    = ((1/M_zz)*(M_zx-(matrix(c(0,sigma2_u_hat),2,1))))
+        Y_zero       = (((1-Y_um_dois[2,1])*x_barra)-(Y_um_dois[1,1]*y_barra))
+        i = 1:length(x)
+        x_til        = (Y_zero + (Y_um_dois[1,1]*y[i]) + (Y_um_dois[2,1]*x[i])) 
+        v_hat        = ( y[i] - 67.56 -(x[i]*0.4232) )
+          
         ##Estimativas de máxima verossimilhança (e.m.v.) sob H0
         alfa_til     = y_barra - (beta_til *x_barra)
         mu_x_til     = x_barra;
@@ -454,24 +470,25 @@ MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til
         EMV         = c(round(beta_hat,2),round(alfa_hat,2),round(mu_x_hat,2),round(sigma2_e_hat,2),round(sigma2_u_hat,2))
         EMV_H0      = c(round(beta_til,2),round(alfa_til,2),round(mu_x_til,2),round(sigma2_e_til,2),round(sigma2_u_til,2))
         
-       
- 
-        
         # Function exit
-        Saida = list(
-          Estimators= list('EMV' = data.frame(Beta     = beta_hat,
-                                         Alpha    = alfa_hat,
-                                         Sigma2_u = sigma2_u_hat,
-                                         Sigma2_e = sigma2_e_hat),
-                      
-                      'EMV_H0' = data.frame(Beta     = beta_til,
-                                            Alpha    = alfa_til,
-                                            Sigma2_u = sigma2_u_til,
-                                            Sigma2_e = sigma2_e_til)),
+        Saida = function(){
+          cat("Call: \n")
+          cat("MEV( x, y ", lambda_x," \n")
+          cat("\n")
+          cat("Residuals: \n")
+          print( summary(x_hat) )
+          cat("\n")
+          cat("Coefficients: \n")
           
-          Statistics = data.frame("R.V. statistics"   = round(LR ,4),
-                                  "R.V.C. statistics" = round(Lrc,4)) 
-          ) #End of function exit list
+          cat(  " XXXXX "  )
+          
+          cat("--- \n")
+          cat("Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 \n")
+          cat("\n")
+          cat("Residual standard error:", " XXXXX " ," on", " XXXXX " ,"degrees of freedom \n")
+          cat("Multiple R-squared:", " XXXXX ",	"Adjusted R-squared:",  " XXXXX ", "\n")
+          cat("F-statistic:", " XXXXX " ,"on "," XXXXX "," and", " XXXXX "," DF", " p-value: "," XXXXX ", " \n")
+        } #End of function exit list
         
         Saida
         
@@ -499,20 +516,32 @@ MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til
           alfa_hat     = y_barra - (beta_hat*x_barra)
           sigma2_u_hat = S_xx/(lambda_x + 1)
           sigma2_e_hat = (lambda_x*(S_yy*S_xx - S_xy^2) - S_xy^2)/(lambda_x*S_xx)
+          x_hat        = (((beta_hat*sigma2_u_hat*(y[]-alfa_hat)) + (sigma2_e_hat*x[])) / ((beta_hat*beta_hat*sigma2_u_hat) + sigma2_e_hat))
           
+        
           # Function exit
-          
-          Saida = list(
-            Estimators= data.frame(Beta     = beta_hat,
-                              Alpha    = alfa_hat,
-                              Sigma2_u = sigma2_u_hat,
-                              Sigma2_e = sigma2_e_hat),
-            Estimated = "Valores estimados",
-            Waste = "Resíduos"
-            ) #End of function exit list
+          Saida = function(){
+            cat("Call: \n")
+            cat("MEV( x, y ", lambda_x," \n")
+            cat("\n")
+            cat("Residuals: \n")
+            print( summary(x_hat) )
+            cat("\n")
+            cat("Coefficients: \n")
+            
+            cat(  " XXXXX "  )
+            
+            cat("--- \n")
+            cat("Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 \n")
+            cat("\n")
+            cat("Residual standard error:", " XXXXX " ," on", " XXXXX " ,"degrees of freedom \n")
+            cat("Multiple R-squared:", " XXXXX ",	"Adjusted R-squared:",  " XXXXX ", "\n")
+            cat("F-statistic:", " XXXXX " ,"on "," XXXXX "," and", " XXXXX "," DF", " p-value: "," XXXXX ", " \n")
+          } #End of function exit list
           
           Saida
-         
+          
+          
         }else{ warning("lambda_x must be a single numbers") }
       }else{ warning("Y must be a vector of numbers") }
     }else{ warning("X must be a vector of numbers") }
@@ -520,4 +549,4 @@ MEV = function(x, y, lambda_x, Correction = FALSE, method = "Bartlett", beta_til
     # Else do Correction
   }else{ warning("The argument thus accepts the options TRUE or FALSE") }
   
-} # End of MEV Function
+} # End of MEM Function

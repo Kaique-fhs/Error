@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^meupacote\.Rcheck$
+^meupacote.*\.tar\.gz$
+^meupacote.*\.tgz$
+^Error\.Rcheck$
+^Error.*\.tar\.gz$
+^Error.*\.tgz$
