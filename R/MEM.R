@@ -1,6 +1,6 @@
 #' @title Regression in model with errors
 #' @name MEM
-#'
+#' 
 #' @description MEM is used to adjust models with errors in the variables.    It can be used to perform regressions on variables that have measurement errors.
 #'
 #' @param x Values vector
